@@ -50,7 +50,7 @@ public partial class MainViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	private async void LoadGachaData()
+	private void LoadGachaData()
 	{
 		// 查找抽卡记录url
 		var gachaUrl = new GachaUrlFinder().FindUrl(SettingDataService.GamePath);
@@ -64,7 +64,7 @@ public partial class MainViewModel : ObservableObject
 		// 构造请求参数
 		var requestParams = new RequestParams(gachaUrlParser, SelectedPoolType.Value);
 		// 获取抽卡记录
-		var gachaApiResponse = await GachaDataService.GetRecordsAsync(requestParams);
+		var gachaApiResponse = GachaDataService.GetRecordsAsync(requestParams).Result;
 		// 错误处理
 		// 官方的Api返回Code不为0时, 说明有错误
 		if (gachaApiResponse?.Code != 0)
