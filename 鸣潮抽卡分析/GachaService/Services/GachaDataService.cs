@@ -6,6 +6,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 using 鸣潮抽卡分析.GachaService.Models;
 using 鸣潮抽卡分析.GachaService.Utilities;
 
@@ -37,7 +38,8 @@ public class GachaDataService
 				string responseBody = await response.Content.ReadAsStringAsync();
 
 				// 将响应内容反序列化为GachaApiResponse对象
-				GachaApiResponse apiResponse = JsonSerializer.Deserialize<GachaApiResponse>(responseBody);
+				GachaApiResponse? apiResponse = JsonSerializer.Deserialize<GachaApiResponse>(responseBody,
+					new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 				return apiResponse;
 			}
 			catch (HttpRequestException e)

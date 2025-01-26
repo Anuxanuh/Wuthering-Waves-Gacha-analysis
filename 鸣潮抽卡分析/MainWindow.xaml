@@ -55,7 +55,8 @@
 
 		<StackPanel Grid.Row="1">
 			<DataGrid ItemsSource="{Binding GachaRecords}"
-					  IsReadOnly="True" />
+					  IsReadOnly="True" 
+					  Height="200"/>
 		</StackPanel>
 	</Grid>
 </Window>

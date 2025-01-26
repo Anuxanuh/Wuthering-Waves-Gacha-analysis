@@ -40,7 +40,9 @@ public partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	private async void GetGachaData()
 	{
-		var gamePath = new GamePathFinder().FindGamePath();
+		//var gamePath = new GamePathFinder().FindGamePath();
+		//MessageBox.Show(gamePath);
+		var gamePath = @"D:\software\Wuthering Waves\Wuthering Waves Game";
 		var gachaUrl = new GachaUrlFinder().FindUrl(gamePath);// 查找抽卡记录url
 		if (gachaUrl == null)
 		{
@@ -50,22 +52,11 @@ public partial class MainViewModel : ObservableObject
 		var gachaUrlParser = GachaUrlParser.Parse(gachaUrl);// 解析URL, 提取参数
 		var requestParams = new RequestParams(gachaUrlParser, SelectedPoolType.Value);// 构造请求参数
 		var gachaApiResponse = await GachaDataService.GetRecordsAsync(requestParams);// 获取抽卡记录
-		if (gachaApiResponse.Code != 0)// 如果有错误信息, 则显示错误信息
+		if (gachaApiResponse?.Code != 0)// 如果有错误信息, 则显示错误信息
 		{
-			MessageBox.Show(gachaApiResponse.Message);
+			MessageBox.Show($"{gachaApiResponse?.Message}\nCode={gachaApiResponse?.Code}");
 			return;
 		}
 		GachaRecords = new ObservableCollection<GachaRecord>(gachaApiResponse.Data);// 显示抽卡记录
-	}
-}
-public class PoolTypeItem
-{
-	public int Value { get; }
-	public string DisplayName { get; }
-
-	public PoolTypeItem(int value, string displayName)
-	{
-		Value = value;
-		DisplayName = $"{value} - {displayName}";
 	}
 }
