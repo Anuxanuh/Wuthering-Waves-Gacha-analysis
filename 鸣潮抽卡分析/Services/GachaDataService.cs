@@ -7,10 +7,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using 鸣潮抽卡分析.GachaService.Models;
-using 鸣潮抽卡分析.GachaService.Utilities;
+using 鸣潮抽卡分析.Models;
+using 鸣潮抽卡分析.Utilities;
 
-namespace 鸣潮抽卡分析.GachaService.Services;
+namespace 鸣潮抽卡分析.Services;
 
 public class GachaDataService
 {

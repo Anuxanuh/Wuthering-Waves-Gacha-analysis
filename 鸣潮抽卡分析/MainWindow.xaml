@@ -53,10 +53,11 @@
 			</StackPanel>
 		</DockPanel>
 
-		<StackPanel Grid.Row="1">
+		<DockPanel  Grid.Row="1"
+					LastChildFill="True">
 			<DataGrid ItemsSource="{Binding GachaRecords}"
-					  IsReadOnly="True" 
-					  Height="200"/>
-		</StackPanel>
+					  IsReadOnly="True"
+					  Margin="5"/>
+		</DockPanel>
 	</Grid>
 </Window>

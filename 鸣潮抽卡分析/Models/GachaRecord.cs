@@ -7,9 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using 鸣潮抽卡分析.GachaService.Utilities;
+using 鸣潮抽卡分析.Utilities;
 
-namespace 鸣潮抽卡分析.GachaService.Models;
+namespace 鸣潮抽卡分析.Models;
 
 public class GachaRecord
 {

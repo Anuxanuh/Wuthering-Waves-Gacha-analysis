@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace 鸣潮抽卡分析.GachaService.Utilities;
+namespace 鸣潮抽卡分析.Utilities;
 
 public class GachaDataDateTimeConverter : JsonConverter<DateTime>
 {

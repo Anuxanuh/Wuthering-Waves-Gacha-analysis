@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace 鸣潮抽卡分析.GachaService.Models;
+namespace 鸣潮抽卡分析.Models;
 
 public class RequestParams
 {

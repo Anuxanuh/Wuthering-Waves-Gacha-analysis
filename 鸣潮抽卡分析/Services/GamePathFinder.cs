@@ -3,9 +3,9 @@ using System.IO;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
-using 鸣潮抽卡分析.GachaService.Models;
+using 鸣潮抽卡分析.Models;
 
-namespace 鸣潮抽卡分析.GachaService.Services;
+namespace 鸣潮抽卡分析.Services;
 
 /// <summary>
 /// 查找游戏目录的类

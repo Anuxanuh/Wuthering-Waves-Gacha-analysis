@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 鸣潮抽卡分析.GachaService.Enums;
+namespace 鸣潮抽卡分析.Enums;
 
 /// <summary>
 /// 卡池类型

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace 鸣潮抽卡分析.GachaService.Models;
+namespace 鸣潮抽卡分析.Models;
 
 /// <summary>
 /// 抽卡URL解析器
