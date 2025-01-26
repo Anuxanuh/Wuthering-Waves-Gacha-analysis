@@ -1,12 +1,70 @@
 ﻿<Window x:Class="鸣潮抽卡分析.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:鸣潮抽卡分析"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:鸣潮抽卡分析"
+		mc:Ignorable="d"
+		Title="鸣潮抽卡分析"
+		Height="450"
+		Width="800">
+	<Window.DataContext>
+		<local:MainViewModel />
+	</Window.DataContext>
 
-    </Grid>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<DockPanel LastChildFill="False"
+				   HorizontalAlignment="Stretch">
+			<Label Content="唤取类型:"
+				   DockPanel.Dock="Left"
+				   Margin="5"
+				   Height="35"
+				   VerticalContentAlignment="Center" />
+			<ComboBox MinWidth="300"
+					  SelectedIndex="0"
+					  DockPanel.Dock="Left"
+					  Margin="5"
+					  Height="35"
+					  ItemsSource="{Binding PoolTypes}"
+					  SelectedItem="{Binding SelectedPoolType}"
+					  DisplayMemberPath="Description"
+					  SelectedValuePath="Value">
+			</ComboBox>
+			<StackPanel Orientation="Horizontal"
+						DockPanel.Dock="Right">
+				<Button Content="获取"
+						Style="{DynamicResource AccentButtonStyle}"
+						HorizontalAlignment="Right"
+						Height="35"
+						Margin="5" />
+				<Button HorizontalAlignment="Right"
+						Height="35"
+						Margin="5">
+					<TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+							   Text="&#xE713;"
+							   FontSize="16" />
+				</Button>
+			</StackPanel>
+		</DockPanel>
+
+		<StackPanel Grid.Row="1">
+			<!--<Button Command="{Binding FindUrlCommand}"
+					Content="提取抽卡记录链接"
+					Style="{DynamicResource AccentButtonStyle}" />
+
+			<Label Content="文件路径"
+				   FontWeight="Bold" />
+			<TextBlock Text="{Binding UrlResult}" />
+
+			<Label Content="ErrorLog"
+				   FontWeight="Bold" />
+			<TextBlock Text="{Binding ErrorLog}"
+					   ScrollViewer.VerticalScrollBarVisibility="Auto" />-->
+		</StackPanel>
+	</Grid>
 </Window>
