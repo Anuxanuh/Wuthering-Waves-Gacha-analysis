@@ -15,11 +15,11 @@ public class RequestParams
 	public string LanguageCode => "zh-Hans";
 	public string RecordId { get; set; }
 
-	public RequestParams(GachaUrlParser parser)
+	public RequestParams(GachaUrlParser parser, int cardPoolType)
 	{
 		PlayerId = parser.PlayerId.ToString();
 		CardPoolId = parser.GachaId;
-		CardPoolType = parser.GachaType;
+		CardPoolType = cardPoolType;
 		ServerId = parser.ServerId;
 		RecordId = parser.RecordId;
 	}

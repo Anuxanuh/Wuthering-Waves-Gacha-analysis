@@ -2,71 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using 鸣潮抽卡分析.GachaService.Models;
 using 鸣潮抽卡分析.GachaService.Utilities;
 
-namespace 鸣潮抽卡分析.GachaService.Services
+namespace 鸣潮抽卡分析.GachaService.Services;
+
+public class GachaDataService
 {
-	public class GachaDataService : IGachaDataService
+	private static readonly string _baseUrl = "https://gmserver-api.aki-game2.com/gacha/record/query";
+
+	public static async Task<GachaApiResponse?> GetRecordsAsync(
+		RequestParams parameters)
 	{
-		private readonly HttpClient _client;
-
-		public GachaDataService()
+		using (HttpClient client = new HttpClient())
 		{
-			_client = HttpClientFactory.CreateClient();
-		}
+			// 要发送的JSON数据
+			string jsonData = JsonSerializer.Serialize(parameters);
 
-		public async Task<(List<GachaRecord> records, string error)> GetRecordsAsync(
-			RequestParams parameters,
-			int poolType)
-		{
+			// 创建请求内容
+			StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 			try
 			{
-				var requestBody = new
-				{
-					playerId = parameters.PlayerId,
-					cardPoolId = parameters.GachaId,
-					cardPoolType = poolType,
-					serverId = parameters.ServerId,
-					languageCode = parameters.LanguageCode,
-					recordId = parameters.RecordId
-				};
+				// 发送POST请求
+				HttpResponseMessage response = await client.PostAsync(_baseUrl, content);
 
-				var content = new StringContent(
-					JsonSerializer.Serialize(requestBody, new JsonSerializerOptions
-					{
-						PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-					}),
-					Encoding.UTF8,
-					"application/json");
-
-				var response = await _client.PostAsync("gacha/record/query", content);
+				// 确保请求成功
 				response.EnsureSuccessStatusCode();
 
-				using var responseStream = await response.Content.ReadAsStreamAsync();
-				var apiResponse = await JsonSerializer.DeserializeAsync<GachaApiResponse>(
-					responseStream,
-					new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+				// 读取响应内容
+				string responseBody = await response.Content.ReadAsStringAsync();
 
-				return HandleApiResponse(apiResponse);
+				// 将响应内容反序列化为GachaApiResponse对象
+				GachaApiResponse apiResponse = JsonSerializer.Deserialize<GachaApiResponse>(responseBody);
+				return apiResponse;
 			}
-			catch (Exception ex)
+			catch (HttpRequestException e)
 			{
-				return (new List<GachaRecord>(), $"请求失败: {ex.Message}");
+				// 捕获并处理请求异常
+				Console.WriteLine("请求异常: " + e.Message);
+				return null;
 			}
-		}
-
-		private (List<GachaRecord>, string) HandleApiResponse(GachaApiResponse response)
-		{
-			if (response?.Code != 0 || response.Data?.Records == null)
-			{
-				return (new List<GachaRecord>(),
-					response == null ? "无效响应" : $"错误代码: {response.Code}");
-			}
-			return (response.Data.Records, null);
 		}
 	}
 }

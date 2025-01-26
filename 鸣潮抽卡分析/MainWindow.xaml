@@ -38,6 +38,7 @@
 			<StackPanel Orientation="Horizontal"
 						DockPanel.Dock="Right">
 				<Button Content="获取"
+						Command="{Binding GetGachaDataCommand}"
 						Style="{DynamicResource AccentButtonStyle}"
 						HorizontalAlignment="Right"
 						Height="35"
@@ -53,18 +54,8 @@
 		</DockPanel>
 
 		<StackPanel Grid.Row="1">
-			<!--<Button Command="{Binding FindUrlCommand}"
-					Content="提取抽卡记录链接"
-					Style="{DynamicResource AccentButtonStyle}" />
-
-			<Label Content="文件路径"
-				   FontWeight="Bold" />
-			<TextBlock Text="{Binding UrlResult}" />
-
-			<Label Content="ErrorLog"
-				   FontWeight="Bold" />
-			<TextBlock Text="{Binding ErrorLog}"
-					   ScrollViewer.VerticalScrollBarVisibility="Auto" />-->
+			<DataGrid ItemsSource="{Binding GachaRecords}"
+					  IsReadOnly="True" />
 		</StackPanel>
 	</Grid>
 </Window>
