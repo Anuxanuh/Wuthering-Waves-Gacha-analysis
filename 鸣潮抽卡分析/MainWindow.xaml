@@ -38,7 +38,7 @@
 			<StackPanel Orientation="Horizontal"
 						DockPanel.Dock="Right">
 				<Button Content="获取"
-						Command="{Binding GetGachaDataCommand}"
+						Command="{Binding LoadGachaDataCommand}"
 						Style="{DynamicResource AccentButtonStyle}"
 						HorizontalAlignment="Right"
 						Height="35"
