@@ -9,6 +9,13 @@ namespace 鸣潮抽卡分析.Services;
 /// </summary>
 public class RepositoryServiceForRecord
 {
+	public RepositoryServiceForRecord()
+	{
+		// 如果基础目录不存在，创建目录
+		if (!Directory.Exists(_baseDirectory))
+			Directory.CreateDirectory(_baseDirectory);
+	}
+
 	// 基础目录路径
 	private static string _baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
 
@@ -66,9 +73,13 @@ public class RepositoryServiceForRecord
 			// 构建文件路径
 			var path = Path.Combine(_baseDirectory, $"{userId}_{cardPoolType}.json");
 			// 序列化对象列表为JSON字符串
-			var json = JsonSerializer.Serialize(records);
+			var json = JsonSerializer.Serialize(records, new JsonSerializerOptions
+			{
+				Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+				WriteIndented = true
+			});
 			// 写入文件
-			File.WriteAllText(path, json);
+			File.WriteAllText(path, json, System.Text.Encoding.UTF8);
 			return true;
 		}
 		catch (Exception)
@@ -98,9 +109,13 @@ public class RepositoryServiceForRecord
 			// 将旧记录添加到新记录前面
 			newUniqueRecords.AddRange(oldRecords);
 			// 序列化合并后的记录为JSON字符串
-			var json = JsonSerializer.Serialize(newUniqueRecords);
+			var json = JsonSerializer.Serialize(newUniqueRecords, new JsonSerializerOptions
+			{
+				Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+				WriteIndented = true
+			});
 			// 写入文件
-			File.WriteAllText(path, json);
+			File.WriteAllText(path, json, System.Text.Encoding.UTF8);
 			return true;
 		}
 		catch (Exception)
@@ -135,6 +150,16 @@ public class RepositoryServiceForSetting
 	/// </summary>
 	public RepositoryServiceForSetting()
 	{
+		// 获取目标文件夹路径（去掉文件名）
+		string directoryPath = Path.GetDirectoryName(_settingDataPath);
+
+		// 如果文件夹不存在，则自动创建（包括所有父级目录）
+		if (!Directory.Exists(directoryPath))
+		{
+			Directory.CreateDirectory(directoryPath);
+		}
+
+
 		// 如果设置文件不存在，创建新设置
 		if (!File.Exists(_settingDataPath))
 		{

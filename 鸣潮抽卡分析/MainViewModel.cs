@@ -41,7 +41,7 @@ public partial class MainViewModel : ObservableObject
 			EnumHelper.GetEnumItems<PoolType>());
 
 		// 设置默认选择第一个
-		SelectedPoolType = PoolTypes.FirstOrDefault();
+		_selectedPoolType = PoolTypes.FirstOrDefault();
 
 		// 加载抽卡记录
 		GachaRecords = new ObservableCollection<GachaRecord>(
