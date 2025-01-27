@@ -55,9 +55,45 @@
 
 		<DockPanel  Grid.Row="1"
 					LastChildFill="True">
-			<DataGrid ItemsSource="{Binding GachaRecords}"
+			<DockPanel DockPanel.Dock="Top">
+				<TextBlock Margin="5">
+                    上次出五星在
+                    <Bold>
+                        <Run Text="{Binding GachaAnalysisViewModel.AwayFromFiveStar, Mode=OneWay}"
+							 Foreground="Gold" />
+                    </Bold>
+                    抽前
+				</TextBlock>
+				<TextBlock Margin="5">
+					平均五星抽数:
+					<Bold>
+						<Run Text="{Binding GachaAnalysisViewModel.FiveStarRate, Mode=OneWay}"
+							 Foreground="Gold" />
+					</Bold>
+				</TextBlock>
+				<TextBlock Margin="5">
+                    上次出四星在
+                    <Bold>
+                        <Run Text="{Binding GachaAnalysisViewModel.AwayFromFourStar, Mode=OneWay}"
+							 Foreground="#FFF10AF1" />
+                    </Bold>
+                    抽前
+				</TextBlock>
+				<TextBlock Margin="5">
+					平均四星抽数:
+					<Bold>
+						<Run Text="{Binding GachaAnalysisViewModel.FourStarRate, Mode=OneWay}"
+							 Foreground="#FFF10AF1" />
+					</Bold>
+				</TextBlock>
+				<CheckBox Content="不显示三星"
+						  IsChecked="{Binding GachaAnalysisViewModel.NotShowThreeStar, UpdateSourceTrigger=PropertyChanged}"
+						  HorizontalAlignment="Right" />
+			</DockPanel>
+
+			<DataGrid ItemsSource="{Binding GachaAnalysisViewModel.GachaRecords}"
 					  IsReadOnly="True"
-					  Margin="5"/>
+					  Margin="5" />
 		</DockPanel>
 	</Grid>
 </Window>

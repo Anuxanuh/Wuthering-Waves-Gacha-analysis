@@ -6,6 +6,7 @@ using 鸣潮抽卡分析.Enums;
 using 鸣潮抽卡分析.Models;
 using 鸣潮抽卡分析.Services;
 using 鸣潮抽卡分析.Utilities;
+using 鸣潮抽卡分析.ViewModels;
 
 namespace 鸣潮抽卡分析;
 public partial class MainViewModel : ObservableObject
@@ -30,8 +31,7 @@ public partial class MainViewModel : ObservableObject
 		}
 	}
 
-	[ObservableProperty]
-	private ObservableCollection<GachaRecord> _gachaRecords;
+	public GachaAnalysisViewModel GachaAnalysisViewModel { get; } = new();
 	#endregion 双向绑定属性
 
 	public MainViewModel()
@@ -44,13 +44,13 @@ public partial class MainViewModel : ObservableObject
 		_selectedPoolType = PoolTypes.FirstOrDefault();
 
 		// 加载抽卡记录
-		GachaRecords = new ObservableCollection<GachaRecord>(
+		GachaAnalysisViewModel.GachaRecords = new ObservableCollection<GachaRecord>(
 			RecordDataService.LoadGachaRecords(
 				SettingDataService.CurrentPlayerId, SelectedPoolType.Value));
 	}
 
 	[RelayCommand]
-	private void LoadGachaData()
+	private async void LoadGachaData()
 	{
 		// 查找抽卡记录url
 		var gachaUrl = new GachaUrlFinder().FindUrl(SettingDataService.GamePath);
@@ -64,7 +64,7 @@ public partial class MainViewModel : ObservableObject
 		// 构造请求参数
 		var requestParams = new RequestParams(gachaUrlParser, SelectedPoolType.Value);
 		// 获取抽卡记录
-		var gachaApiResponse = GachaDataService.GetRecordsAsync(requestParams).Result;
+		var gachaApiResponse = await GachaDataService.GetRecordsAsync(requestParams);
 		// 错误处理
 		// 官方的Api返回Code不为0时, 说明有错误
 		if (gachaApiResponse?.Code != 0)
@@ -74,10 +74,16 @@ public partial class MainViewModel : ObservableObject
 				$"Code={gachaApiResponse?.Code}");
 			return;
 		}
-		// 赋值, 显示抽卡记录
-		GachaRecords = new ObservableCollection<GachaRecord>(gachaApiResponse.Data);
+		// 更新数据
+		UpdateGachaData(gachaApiResponse.Data, gachaUrlParser.PlayerId);
+	}
+
+	private void UpdateGachaData(IEnumerable<GachaRecord> records, long playerId)
+	{
+		// 赋值, 显示抽卡记录-更新ViewModel
+		GachaAnalysisViewModel.GachaRecords = new ObservableCollection<GachaRecord>(records);
 		// 仓储服务更新数据
-		RecordDataService.SaveGachaRecords(gachaUrlParser.PlayerId, SelectedPoolType.Value, gachaApiResponse.Data);// 保存抽卡记录
-		SettingDataService.CurrentPlayerId = gachaUrlParser.PlayerId;// 保存当前玩家ID
+		RecordDataService.SaveGachaRecords(playerId, SelectedPoolType.Value, records);// 保存抽卡记录
+		SettingDataService.CurrentPlayerId = playerId;// 保存当前玩家ID
 	}
 }

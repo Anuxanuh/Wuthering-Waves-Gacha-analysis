@@ -26,7 +26,7 @@ public class RepositoryServiceForRecord
 	/// <param name="cardPoolType">卡池类型</param>
 	/// <param name="records">抽卡记录列表</param>
 	/// <returns>保存是否成功</returns>
-	public bool SaveGachaRecords(long userId, int cardPoolType, List<GachaRecord> records)
+	public bool SaveGachaRecords(long userId, int cardPoolType, IEnumerable<GachaRecord> records)
 	{
 		// 如果文件存在，更新记录，否则保存新记录
 		if (File.Exists(Path.Combine(_baseDirectory, $"{userId}_{cardPoolType}.json")))
@@ -66,7 +66,7 @@ public class RepositoryServiceForRecord
 	/// <param name="cardPoolType">卡池类型</param>
 	/// <param name="records">抽卡记录列表</param>
 	/// <returns>保存是否成功</returns>
-	private bool SaveGachaRecords2(long userId, int cardPoolType, List<GachaRecord> records)
+	private bool SaveGachaRecords2(long userId, int cardPoolType, IEnumerable<GachaRecord> records)
 	{
 		try
 		{
@@ -96,7 +96,7 @@ public class RepositoryServiceForRecord
 	/// <param name="cardPoolType">卡池类型</param>
 	/// <param name="newRecords">新抽卡记录列表</param>
 	/// <returns>更新是否成功</returns>
-	private bool UpdateGachaRecords(long userId, int cardPoolType, List<GachaRecord> newRecords)
+	private bool UpdateGachaRecords(long userId, int cardPoolType, IEnumerable<GachaRecord> newRecords)
 	{
 		try
 		{
@@ -105,7 +105,7 @@ public class RepositoryServiceForRecord
 			// 加载旧记录
 			var oldRecords = LoadGachaRecords(userId, cardPoolType);
 			// 找到新记录中时间早于旧记录的部分
-			var newUniqueRecords = newRecords[0..newRecords.FindIndex(r => r.Time >= oldRecords[0].Time)];
+			var newUniqueRecords = newRecords.TakeWhile(r => r.Time < oldRecords[0].Time).ToList();
 			// 将旧记录添加到新记录前面
 			newUniqueRecords.AddRange(oldRecords);
 			// 序列化合并后的记录为JSON字符串
